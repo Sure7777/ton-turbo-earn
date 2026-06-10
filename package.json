@@ -1,7 +1,7 @@
 {
   "name": "ton-turbo-earn",
   "version": "1.0.0",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "grammy": "^1.23.0"
   },
