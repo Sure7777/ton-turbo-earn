@@ -1,10 +1,11 @@
 {
   "name": "ton-turbo-earn",
   "version": "1.0.0",
+  "type": "commonjs",
   "dependencies": {
     "grammy": "^1.23.0"
   },
-  "devDependencies": {
-    "vite": "^5.0.0"
+  "scripts": {
+    "build": "vite build"
   }
 }
