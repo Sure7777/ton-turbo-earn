@@ -1,128 +1,404 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TON Turbo Earn</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             background: linear-gradient(135deg, #0a0f1e 0%, #0a1a2a 100%);
-            font-family: system-ui, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
-            margin: 0;
-            padding: 16px;
-            color: white;
+            padding: 20px;
+            color: #fff;
         }
         .container {
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
         }
+        /* بطاقة الرصيد */
         .balance-card {
-            background: rgba(0, 255, 200, 0.1);
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(0, 255, 200, 0.3);
+            background: linear-gradient(135deg, rgba(0, 200, 255, 0.1), rgba(0, 100, 200, 0.2));
+            border-radius: 32px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(0, 200, 255, 0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
         }
         .balance {
-            font-size: 42px;
-            font-weight: bold;
-            color: #00ffc8;
+            font-size: 48px;
+            font-weight: 800;
+            color: #00e6ff;
+            text-shadow: 0 0 10px rgba(0,230,255,0.5);
         }
-        .points {
+        .ton-value {
             font-size: 18px;
-            color: #aaa;
+            color: #88aaff;
+            margin-top: 8px;
         }
-        .ad-btn {
-            background: linear-gradient(135deg, #0088cc, #006699);
+        /* الأزرار الرئيسية */
+        .earn-btn {
+            background: linear-gradient(135deg, #00c853, #00a86b);
             border: none;
-            color: white;
-            padding: 16px 32px;
-            border-radius: 48px;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 12px 0;
-            cursor: pointer;
             width: 100%;
+            padding: 18px;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,200,80,0.3);
         }
-        .grid {
+        .earn-btn:active {
+            transform: scale(0.97);
+        }
+        .earn-btn.blue {
+            background: linear-gradient(135deg, #0088cc, #006699);
+            box-shadow: 0 4px 15px rgba(0,136,204,0.3);
+        }
+        /* شبكة المهام */
+        .tasks-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin: 20px 0;
         }
-        .task-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 16px;
-            padding: 16px;
-            color: white;
+        .task-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.15);
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .footer {
+        .task-card:active {
+            background: rgba(255,255,255,0.15);
+            transform: scale(0.96);
+        }
+        .task-reward {
+            color: #00e6ff;
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        /* الشريط السفلي */
+        .bottom-nav {
             display: flex;
             justify-content: space-around;
-            background: rgba(0,0,0,0.3);
-            border-radius: 32px;
-            padding: 12px;
-            margin-top: 24px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 12px 20px;
+            margin-top: 30px;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .footer span {
+        .nav-item {
+            text-align: center;
             font-size: 12px;
             color: #aaa;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .nav-item.active {
+            color: #00e6ff;
+        }
+        .withdraw-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .withdraw-section.show {
+            display: block;
+        }
+        input, button {
+            border-radius: 30px;
+            padding: 12px 20px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            background: #1a2a3a;
+            color: white;
+            width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid #334455;
+        }
+        .withdraw-btn {
+            background: linear-gradient(135deg, #f5a623, #e67e22);
+            width: 100%;
+            font-weight: bold;
+        }
+        .referral-section {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .referral-section.show {
+            display: block;
+        }
+        .ref-link {
+            background: #1a2a3a;
+            padding: 12px;
+            border-radius: 30px;
+            word-break: break-all;
+            font-size: 12px;
+            margin: 15px 0;
+            border: 1px solid #00e6ff;
+        }
+        .copy-btn {
+            background: #00a86b;
+            margin-top: 5px;
+        }
+        .stats-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .stats-section.show {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="balance-card">
-            <div class="balance" id="balance">0</div>
-            <div class="points">≈ <span id="tonBalance">0</span> TON</div>
-        </div>
+<div class="container">
+    <!-- قسم الرصيد -->
+    <div class="balance-card" id="balanceSection">
+        <div class="balance" id="pointsDisplay">0</div>
+        <div class="ton-value">≈ <span id="tonDisplay">0.0000</span> TON</div>
+    </div>
 
-        <button class="ad-btn" onclick="earnPoints()">🎬 شاهد إعلان +1,000</button>
-
-        <div class="grid">
-            <div class="task-btn" onclick="completeTask(1)">📢 مهمة 1<br><span>+500</span></div>
-            <div class="task-btn" onclick="completeTask(2)">🤖 مهمة 2<br><span>+500</span></div>
-            <div class="task-btn" onclick="completeTask(3)">💬 مهمة 3<br><span>+500</span></div>
-            <div class="task-btn" onclick="completeTask(4)">⭐ مهمة 4<br><span>+500</span></div>
-        </div>
-
-        <div class="footer">
-            <span>🏠 الرئيسية</span>
-            <span>💰 الربح</span>
-            <span>👥 الإحالات</span>
-            <span>💳 المحفظة</span>
+    <!-- قسم Earn (الصفحة الرئيسية) -->
+    <div id="earnSection">
+        <button class="earn-btn" id="watchAdBtn">🎬 شاهد إعلان +1,000</button>
+        <div class="tasks-grid">
+            <div class="task-card" data-reward="500">📢 اشترك بالقناة<br><span class="task-reward">+500</span></div>
+            <div class="task-card" data-reward="500">🤖 تابع البوت<br><span class="task-reward">+500</span></div>
+            <div class="task-card" data-reward="500">💬 انضم للمجموعة<br><span class="task-reward">+500</span></div>
+            <div class="task-card" data-reward="500">⭐ قيم التطبيق<br><span class="task-reward">+500</span></div>
         </div>
     </div>
 
-    <script>
-        let points = 0;
-        
-        function updateUI() {
-            document.getElementById('balance').innerText = points.toLocaleString();
-            let ton = (points / 10000000).toFixed(4);
-            document.getElementById('tonBalance').innerText = ton;
+    <!-- قسم السحب (يظهر عند الضغط على المحفظة) -->
+    <div id="withdrawSection" class="withdraw-section">
+        <h3 style="margin-bottom: 15px; text-align: center;">💰 سحب أرباحك</h3>
+        <input type="text" id="walletAddress" placeholder="عنوان محفظة TON (Tonkeeper...)">
+        <input type="number" id="withdrawAmount" placeholder="المبلغ بـ TON">
+        <button class="earn-btn withdraw-btn" id="requestWithdrawBtn">📤 طلب السحب</button>
+        <div style="font-size: 12px; color: #aaa; text-align: center; margin-top: 10px;">
+            الحد الأدنى: 0.10 TON<br>
+            رسوم الشبكة: 0.03 TON
+        </div>
+    </div>
+
+    <!-- قسم الإحالات -->
+    <div id="referralSection" class="referral-section">
+        <h3 style="margin-bottom: 15px;">👥 دعوة الأصدقاء</h3>
+        <div class="ref-link" id="refLink">جاري التحميل...</div>
+        <button class="earn-btn copy-btn" id="copyRefBtn">📋 نسخ الرابط</button>
+        <p style="margin-top: 15px; font-size: 13px; color: #aaa;">تحصل على 7% من أرباح أصدقائك المباشرين، و3% من أصدقائهم، و1% من المستوى الثالث.</p>
+    </div>
+
+    <!-- قسم الإحصائيات -->
+    <div id="statsSection" class="stats-section">
+        <h3 style="margin-bottom: 15px;">📊 إحصائياتي</h3>
+        <div>👥 إجمالي الإحالات: <span id="totalRefs">0</span></div>
+        <div>⭐ نقاطي: <span id="statsPoints">0</span></div>
+        <div>💰 إجمالي المسحوب: <span id="totalWithdrawn">0</span> TON</div>
+    </div>
+
+    <!-- الشريط السفلي -->
+    <div class="bottom-nav">
+        <div class="nav-item" data-page="earn">🏠 الكسب</div>
+        <div class="nav-item" data-page="referral">👥 دعوة</div>
+        <div class="nav-item" data-page="withdraw">💳 المحفظة</div>
+        <div class="nav-item" data-page="stats">📊 إحصائيات</div>
+    </div>
+</div>
+
+<script>
+    // بيانات المستخدم
+    let userPoints = 0;
+    let referralCode = '';
+    let totalReferrals = 0;
+    let totalWithdrawn = 0;
+    
+    // تحميل البيانات المحفوظة
+    function loadData() {
+        let saved = localStorage.getItem('ton_turbo_user');
+        if(saved) {
+            let data = JSON.parse(saved);
+            userPoints = data.points || 0;
+            referralCode = data.refCode || generateReferralCode();
+            totalReferrals = data.totalRefs || 0;
+            totalWithdrawn = data.totalWithdrawn || 0;
+        } else {
+            referralCode = generateReferralCode();
         }
-        
-        function earnPoints() {
-            points += 1000;
-            updateUI();
-            alert("🎉 تم إضافة 1000 نقطة! رصيدك: " + points + " نقطة");
-        }
-        
-        function completeTask(taskId) {
-            points += 500;
-            updateUI();
-            alert("✅ تم إكمال المهمة " + taskId + "! +500 نقطة");
-        }
-        
         updateUI();
-    </script>
+    }
+    
+    function generateReferralCode() {
+        return 'USER_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    }
+    
+    function saveData() {
+        localStorage.setItem('ton_turbo_user', JSON.stringify({
+            points: userPoints,
+            refCode: referralCode,
+            totalRefs: totalReferrals,
+            totalWithdrawn: totalWithdrawn
+        }));
+    }
+    
+    function updateUI() {
+        document.getElementById('pointsDisplay').innerText = userPoints.toLocaleString();
+        let ton = (userPoints / 10000000).toFixed(6);
+        document.getElementById('tonDisplay').innerText = ton;
+        document.getElementById('statsPoints').innerText = userPoints.toLocaleString();
+        document.getElementById('totalRefs').innerText = totalReferrals;
+        document.getElementById('totalWithdrawn').innerText = totalWithdrawn.toFixed(4);
+        
+        // رابط الإحالة
+        let botUsername = 'TonTurboEarnBot';
+        let refLink = `https://t.me/${botUsername}?start=${referralCode}`;
+        document.getElementById('refLink').innerText = refLink;
+    }
+    
+    function addPoints(amount) {
+        userPoints += amount;
+        updateUI();
+        saveData();
+        // تأثير اهتزاز بسيط
+        document.getElementById('balanceSection').style.transform = 'scale(1.02)';
+        setTimeout(() => {
+            document.getElementById('balanceSection').style.transform = 'scale(1)';
+        }, 200);
+    }
+    
+    // التنقل بين الأقسام
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            let page = item.dataset.page;
+            document.getElementById('earnSection').style.display = 'none';
+            document.getElementById('withdrawSection').classList.remove('show');
+            document.getElementById('referralSection').classList.remove('show');
+            document.getElementById('statsSection').classList.remove('show');
+            
+            if(page === 'earn') {
+                document.getElementById('earnSection').style.display = 'block';
+            } else if(page === 'withdraw') {
+                document.getElementById('withdrawSection').classList.add('show');
+            } else if(page === 'referral') {
+                document.getElementById('referralSection').classList.add('show');
+            } else if(page === 'stats') {
+                document.getElementById('statsSection').classList.add('show');
+            }
+            
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+        });
+    });
+    
+    // زر مشاهدة الإعلان
+    document.getElementById('watchAdBtn').addEventListener('click', () => {
+        addPoints(1000);
+        alert('🎉 تمت مشاهدة الإعلان! +1000 نقطة');
+    });
+    
+    // مهام الشبكة
+    document.querySelectorAll('.task-card').forEach(card => {
+        card.addEventListener('click', () => {
+            let reward = parseInt(card.dataset.reward);
+            addPoints(reward);
+            alert(`✅ تم إكمال المهمة! +${reward} نقطة`);
+        });
+    });
+    
+    // طلب السحب
+    document.getElementById('requestWithdrawBtn').addEventListener('click', () => {
+        let wallet = document.getElementById('walletAddress').value.trim();
+        let amount = parseFloat(document.getElementById('withdrawAmount').value);
+        let minWithdraw = 0.10;
+        let fee = 0.03;
+        let currentTon = userPoints / 10000000;
+        
+        if(!wallet) {
+            alert('الرجاء إدخال عنوان محفظة TON');
+            return;
+        }
+        if(isNaN(amount) || amount < minWithdraw) {
+            alert(`الحد الأدنى للسحب هو ${minWithdraw} TON`);
+            return;
+        }
+        if(amount > currentTon) {
+            alert('لا تملك رصيداً كافياً');
+            return;
+        }
+        
+        let netAmount = amount - fee;
+        if(confirm(`طلب سحب: ${amount} TON\nالرسوم: ${fee} TON\nالصافي المستلم: ${netAmount} TON\nهل أنت متأكد؟`)) {
+            // خصم النقاط
+            let pointsToDeduct = amount * 10000000;
+            userPoints = Math.max(0, userPoints - pointsToDeduct);
+            totalWithdrawn += amount;
+            updateUI();
+            saveData();
+            
+            // تسجيل الطلب
+            let requests = JSON.parse(localStorage.getItem('withdrawal_requests') || '[]');
+            requests.push({
+                user: 'user_' + referralCode,
+                wallet: wallet,
+                amount: amount,
+                fee: fee,
+                net: netAmount,
+                status: 'pending',
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('withdrawal_requests', JSON.stringify(requests));
+            
+            alert(`✅ تم تقديم طلب السحب بنجاح!\nسيتم مراجعته وإرساله إلى محفظتك خلال 24 ساعة.`);
+            document.getElementById('walletAddress').value = '';
+            document.getElementById('withdrawAmount').value = '';
+        }
+    });
+    
+    // نسخ رابط الإحالة
+    document.getElementById('copyRefBtn').addEventListener('click', () => {
+        let refLink = document.getElementById('refLink').innerText;
+        navigator.clipboard.writeText(refLink);
+        alert('📋 تم نسخ رابط الإحالة!');
+    });
+    
+    // الحصول على معرّف المستخدم من تليجرام (إذا كان داخل التطبيق)
+    if(window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.ready();
+        let user = Telegram.WebApp.initDataUnsafe?.user;
+        if(user && user.id) {
+            // يمكن استخدام معرف تليجرام لتخصيص التجربة
+            console.log('User ID:', user.id);
+        }
+    }
+    
+    // تحميل البيانات عند بدء التشغيل
+    loadData();
+    
+    // تفعيل القسم الرئيسي
+    document.querySelector('.nav-item[data-page="earn"]').click();
+</script>
 </body>
 </html>
