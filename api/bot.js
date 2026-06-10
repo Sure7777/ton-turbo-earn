@@ -1,15 +1,12 @@
-const { Bot } = require("grammy"); // مكتبة سهلة لتشغيل البوت
+import { Bot } from "grammy";
 
-// استدعاء توكن البوت بشكل آمن من البيئة المحيطة
+// استدعاء التوكن بشكل آمن
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
 
-// عندما يضغط المستخدم /start في البوت
+// أمر البدء والترحيب بالمستخدم
 bot.command("start", async (ctx) => {
-  const userId = ctx.from.id;
   const username = ctx.from.username || "User";
-
-  // رابط تطبيق الويب المصغر الخاص بك (الموجود في جيثاب)
-  const webAppUrl = "https://sure7777.github.io/ton-turbo-earn/";
+  const webAppUrl = "https://ton-turbo-earn.vercel.app/";
 
   await ctx.reply(`أهلاً بك يا ${username} في بوت TON Turbo Earn! 🚀\n\nاضغط على الزر أدناه لفتح التطبيق وبدء كسب الأرباح ومشاهدة الإعلانات.`, {
     reply_markup: {
@@ -20,15 +17,17 @@ bot.command("start", async (ctx) => {
   });
 });
 
-// تشغيل البوت كـ Serverless Function على Vercel
-module.exports = async (req, res) => {
-  try {
-    if (req.method === "POST") {
+// تشغيل البوت متوافقاً مع نظام Vercel الحديث
+export default async (req, res) => {
+  if (req.method === "POST") {
+    try {
       await bot.handleUpdate(req.body);
+      res.status(200).send("OK");
+    } catch (err) {
+      console.error("Error handling update:", err);
+      res.status(500).send("Internal Error");
     }
-    res.status(200).send("Bot is running...");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error handling update");
+  } else {
+    res.status(200).send("Bot is running successfully with ESM!");
   }
 };
