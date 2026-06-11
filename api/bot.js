@@ -10,13 +10,15 @@ bot.command("start", async (ctx) => {
   // رابط تطبيق الويب المصغر الخاص بك في فيرسيل
   const webAppUrl = "https://ton-turbo-earn.vercel.app/";
 
-  await ctx.reply(`أهلاً بك يا ${username} في بوت TON Turbo Earn! 🚀\n\nاضغط على الزر أدناه لفتح التطبيق وبدء كسب الأرباح ومشاهدة الإعلانات.`, {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: "🚀 افتح التطبيق وابدأ الربح", web_app: { url: webAppUrl } }]
-      ]
+  await ctx.reply(`أهلاً بك يا ${username} في بوت TON Turbo Earn! 🚀\n\nاضغط على الزر أدناه لفتح التطبيق وبدء كسب الأرباح ومشاهدة إحصائياتك!`, 
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "🚀 افتح التطبيق وابدأ الربح", web_app: { url: webAppUrl } }]
+        ]
+      }
     }
-  });
+  );
 });
 
 // تشغيل البوت كـ Serverless Function متوافق مع نظام ES Modules الحديث
