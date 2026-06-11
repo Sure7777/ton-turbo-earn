@@ -5,7 +5,11 @@
   "dependencies": {
     "grammy": "^1.23.0"
   },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "dev": "vite"
   }
 }
