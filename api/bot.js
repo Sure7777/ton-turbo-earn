@@ -7,7 +7,7 @@ const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
 bot.command("start", async (ctx) => {
   const username = ctx.from.username || "User";
 
-  // رابط تطبيق الويب المصغر الخاص بك
+  // رابط تطبيق الويب المصغر الخاص بك في فيرسيل
   const webAppUrl = "https://ton-turbo-earn.vercel.app/";
 
   await ctx.reply(`أهلاً بك يا ${username} في بوت TON Turbo Earn! 🚀\n\nاضغط على الزر أدناه لفتح التطبيق وبدء كسب الأرباح ومشاهدة الإعلانات.`, {
