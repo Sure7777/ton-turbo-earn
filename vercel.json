@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "api/bot.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "api/**"
+      }
     },
     {
       "src": "package.json",
@@ -20,5 +23,8 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ]
+  ],
+  "env": {
+    "NODE_OPTIONS": "--experimental-modules"
+  }
 }
