@@ -1,11 +1,13 @@
 import { Bot } from "grammy";
 
-// استدعاء التوكن بشكل آمن من البيئة المحيطة
+// استدعاء توكن البوت بشكل آمن من البيئة المحيطة
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
 
-// عند إرسال /start في البوت
+// عندما يضغط المستخدم /start في البوت
 bot.command("start", async (ctx) => {
   const username = ctx.from.username || "User";
+
+  // رابط تطبيق الويب المصغر الخاص بك
   const webAppUrl = "https://ton-turbo-earn.vercel.app/";
 
   await ctx.reply(`أهلاً بك يا ${username} في بوت TON Turbo Earn! 🚀\n\nاضغط على الزر أدناه لفتح التطبيق وبدء كسب الأرباح ومشاهدة الإعلانات.`, {
@@ -17,7 +19,7 @@ bot.command("start", async (ctx) => {
   });
 });
 
-// تشغيل الدالة كـ Serverless Function على Vercel
+// تشغيل البوت كـ Serverless Function متوافق مع نظام ES Modules الحديث
 export default async (req, res) => {
   if (req.method === "POST") {
     try {
@@ -28,6 +30,6 @@ export default async (req, res) => {
       return res.status(500).send("Internal Error");
     }
   } else {
-    return res.status(200).send("Bot is running successfully!");
+    return res.status(200).send("Bot is running successfully with ESM!");
   }
 };
